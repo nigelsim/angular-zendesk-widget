@@ -49,6 +49,9 @@
 
           angular.forEach(apiMethods, function(method) {
             ZendeskWidgetApi.prototype[method] = function() {
+              if (!settings.accountUrl) {
+                return;
+              }
               var closureArgs = arguments;
               $window.zE(function() {
                 $window.zE[method].apply($window.zE, closureArgs);
@@ -68,10 +71,12 @@
   angular.module('zendeskWidget')
    .run([
      '$window',
+     '$log',  
      'zendeskWidgetSettings',
-     function($window, zendeskWidgetSettings) {
+     function($window, $log, zendeskWidgetSettings) {
        if (!zendeskWidgetSettings.accountUrl) {
-         throw new Error('Missing accountUrl. Please set in app config via ZendeskWidgetProvider');
+         $log.warn('Missing accountUrl. Please set in app config via ZendeskWidgetProvider');
+         return;
        }
 
        var window = $window;

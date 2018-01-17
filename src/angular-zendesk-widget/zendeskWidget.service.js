@@ -43,6 +43,9 @@
 
           angular.forEach(apiMethods, function(method) {
             ZendeskWidgetApi.prototype[method] = function() {
+              if (!settings.accountUrl) {
+                return;
+              }
               var closureArgs = arguments;
               $window.zE(function() {
                 $window.zE[method].apply($window.zE, closureArgs);
