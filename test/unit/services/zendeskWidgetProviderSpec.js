@@ -10,6 +10,8 @@ describe('ZendeskWidgetProvider', function() {
   }));
 
   describe('a set of API methods', function() {
+    var originalAccountUrl;
+
     beforeEach(function() {
       var apiMethods = ['setLocale', 'identify', 'hide', 'show', 'activate'];
       // Stub out $window.zE() wrapper and all apiMethods
@@ -20,6 +22,14 @@ describe('ZendeskWidgetProvider', function() {
         spyOn($window.zE, apiMethod).and.callThrough();
       }
     });
+    beforeEach(inject(function(_zendeskWidgetSettings_) {
+      originalAccountUrl = _zendeskWidgetSettings_.accountUrl;
+      _zendeskWidgetSettings_.accountUrl = 'test.zendesk.con';
+    }));
+    afterEach(inject(function(_zendeskWidgetSettings_) {
+      _zendeskWidgetSettings_.accountUrl = originalAccountUrl;
+    }));
+
 
     it("delegates to Zendesk's Web Widget API", function() {
       var anyArgs = ['foo', 'bar', 'baz'];
